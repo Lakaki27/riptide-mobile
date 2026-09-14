@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<network-security-config>
+    <base-config>
+        <trust-anchors>
+            <!-- Trust system certificates -->
+            <certificates src="system" />
+            <!-- Trust your self-signed certificate -->
+            <certificates src="@raw/maelstrom_ca" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

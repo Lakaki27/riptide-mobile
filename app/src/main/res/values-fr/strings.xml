@@ -1,0 +1,235 @@
+<resources>
+    <string name="app_name">Riptide</string>
+
+    <string name="now_playing">En lecture</string>
+    <string name="add_music">Ajouter de la musique</string>
+    <string name="close">Fermer</string>
+    <string name="starting">Démarrage…</string>
+    <string name="start_download">Lancer le téléchargement</string>
+
+    <string name="status_downloading">Téléchargement</string>
+    <string name="status_processing">Traitement</string>
+    <string name="status_uploading">Envoi</string>
+    <string name="status_done">Ajouté à la bibliothèque</string>
+    <string name="status_failed">Échoué</string>
+
+    <string name="playing_next">À suivre</string>
+    <string name="search_queue">Rechercher dans la file d\'attente</string>
+    <string name="search_songs">Rechercher des titres…</string>
+    <string name="search_artists">Rechercher des artistes…</string>
+    <string name="add_to_queue">Ajouter à la file d\'attente</string>
+    <string name="play_next">Lire ensuite</string>
+    <string name="add_to_playlist">Ajouter à la playlist ›</string>
+    <string name="no_playlists">Aucune playlist</string>
+    <string name="remove_from_playlist">Retirer de la playlist</string>
+    <string name="play_all">Tout lire</string>
+
+    <string name="email">E-mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="sign_in">Se connecter</string>
+    <string name="signing_in">Connexion en cours…</string>
+
+    <string name="add_song">Ajouter un titre</string>
+    <string
+        name="search_in_this_playlist"
+    >Rechercher dans cette playlist</string>
+    <string name="new_playlist">Nouvelle playlist</string>
+    <string name="cancel">Annuler</string>
+    <string name="create">Créer</string>
+
+    <string name="statistics">Statistiques</string>
+    <string name="loading">Chargement…</string>
+    <string name="listening_activity">Activité d\'écoute</string>
+    <string name="heatmap_this_month">Ce mois-ci</string>
+    <string name="heatmap_this_year">Cette année</string>
+    <string name="heatmap_all_time">Depuis le début</string>
+    <string name="top_songs">Titres les plus écoutés</string>
+    <string name="no_plays_yet">Aucune écoute pour le moment</string>
+    <string name="top_artists">Artistes les plus écoutés</string>
+
+    <string
+        name="legal_disclaimer_view"
+    >Voir la clause de non-responsabilité</string>
+    <string
+        name="legal_disclaimer_download_title"
+    >Clause de non-responsabilité et conformité de l\'utilisateur</string>
+    <string
+        name="legal_disclaimer_download_text"
+    >En utilisant cette fonctionnalité, et particulièrement toute fonctionnalité intégrée de yt-dlp, vous êtes seul responsable de vous assurer que vous avez le droit de télécharger, convertir ou distribuer tout contenu auquel vous accédez. Le développeur ne cautionne ni ne facilite la violation du droit d\'auteur, et cette application est un projet indépendant non affilié à aucune plateforme tierce.</string>
+
+    <string name="order_mode_normal">Lecture continue</string>
+    <string name="order_mode_loop_song">Répéter ce titre</string>
+    <string name="order_mode_loop_playlist">Répéter la playlist</string>
+    <string name="order_mode_randomize">Lecture aléatoire</string>
+
+    <string
+        name="couldnt_fetch_video"
+    >Impossible de récupérer les informations de la vidéo</string>
+    <string
+        name="couldnt_start_download"
+    >Impossible de démarrer le téléchargement</string>
+    <string name="upload_failed">Échec de l\'envoi</string>
+    <string name="from_url">Depuis une URL</string>
+    <string name="upload_files">Importer des fichiers</string>
+    <string name="fetch_info">Récupérer les infos</string>
+    <string name="title">Titre</string>
+    <string name="artist">Artiste</string>
+    <string name="back">Retour</string>
+    <string
+        name="dragndrop_audio"
+    >Appuyez pour sélectionner des fichiers audio</string>
+    <string name="uploading">Envoi en cours…</string>
+    <plurals name="upload_files_count">
+        <item quantity="one">Importer %1$d fichier</item>
+        <item quantity="other">Importer %1$d fichiers</item>
+    </plurals>
+    <string name="running_dl_job">Téléchargement en cours</string>
+
+    <string name="filter_created_at">Date d\'ajout</string>
+    <string name="filter_name">Nom</string>
+    <string name="filter_duration">Durée</string>
+    <string name="filter_artist">Artiste</string>
+
+    <string name="nav_home">Accueil</string>
+    <string name="nav_artists">Artistes</string>
+    <string name="nav_playlists">Playlists</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Paramètres</string>
+
+    <string name="song_menu_add_to_queue">Ajouter à la file d\'attente</string>
+    <string name="song_menu_play_next">Lire ensuite</string>
+    <string name="song_menu_add_to_playlist">Ajouter à la playlist</string>
+    <string
+        name="song_menu_remove_from_playlist"
+    >Retirer de la playlist</string>
+    <string name="song_menu_no_playlists">Aucune playlist</string>
+
+    <string name="set_a_new_password">Définir un nouveau mot de passe</string>
+    <string
+        name="your_password_was_reset"
+    >Votre mot de passe a été réinitialisé par un administrateur. Choisissez-en un nouveau pour continuer.</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string
+        name="new_password_confirm"
+    >Confirmer le nouveau mot de passe</string>
+    <string name="saving">Enregistrement…</string>
+    <string name="set_password">Définir le mot de passe</string>
+    <string name="forgot_password">Mot de passe oublié</string>
+    <string name="forgot_password_q">Mot de passe oublié ?</string>
+    <string
+        name="forgot_password_text"
+    >Veuillez contacter votre administrateur pour réinitialiser votre mot de passe.</string>
+    <string name="got_it">Compris</string>
+
+    <string name="playlist_name">Nom de la playlist</string>
+    <string name="theme_updated">Thème mis à jour</string>
+    <string name="language_updated">Langue mise à jour</string>
+    <string
+        name="password_length_requirement"
+    >Le nouveau mot de passe doit contenir au moins %1$d caractères</string>
+    <string
+        name="passwords_do_not_match"
+    >Les mots de passe ne correspondent pas</string>
+    <string name="password_changed">Mot de passe modifié</string>
+    <string
+        name="password_changed_fail"
+    >Échec de la modification du mot de passe</string>
+    <string
+        name="couldnt_reset_password"
+    >Impossible de réinitialiser le mot de passe</string>
+    <string name="user_deleted">Utilisateur supprimé</string>
+    <string
+        name="user_deleted_fail"
+    >Impossible de supprimer l\'utilisateur</string>
+    <string name="song_deleted">Titre supprimé</string>
+
+    <string name="preferences">Préférences</string>
+    <string name="theme">Thème</string>
+    <string name="theme_system">Système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="language">Langue</string>
+    <string name="language_en">Anglais</string>
+    <string name="language_fr">Français</string>
+
+    <string name="change_password">Changer le mot de passe</string>
+    <string
+        name="change_password_requirement"
+    >Le nouveau mot de passe doit contenir au moins %1$d caractères</string>
+    <string name="current_password">Mot de passe actuel</string>
+    <string name="update_password">Mettre à jour le mot de passe</string>
+
+    <string name="users">Utilisateurs</string>
+    <string name="new_user">Nouvel utilisateur</string>
+    <string name="pending_reset">Réinitialisation en attente</string>
+    <string
+        name="reset_password_for"
+    >Réinitialiser le mot de passe pour %1$s</string>
+    <string name="reset_password">Réinitialiser le mot de passe</string>
+    <string name="delete">Supprimer</string>
+
+    <string name="library_management">Gestion de la bibliothèque</string>
+    <string name="ingesting">Importation…</string>
+    <string
+        name="ingest_consume_folder"
+    >Importer le dossier d\'acquisition</string>
+    <string name="resyncing">Ressynchronisation…</string>
+    <string name="resync_library">Ressynchroniser la bibliothèque</string>
+    <string
+        name="library_resync_progress"
+    >Progression de la resynchronisation</string>
+    <string name="song_progress_count">%1$d / %2$d titres</string>
+    <string name="delete_songs">Supprimer des titres</string>
+    <string name="logout">Déconnexion</string>
+
+    <string name="user_role">Rôle utilisateur</string>
+    <string name="role_user">Utilisateur</string>
+    <string name="role_admin">Admin</string>
+
+    <string
+        name="reset_password_for_q"
+    >Réinitialiser le mot de passe pour %1$s ?</string>
+    <string
+        name="reset_password_for_q_text"
+    >Un nouveau mot de passe temporaire sera généré.</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="delete_email_q">Supprimer %1$s ?</string>
+    <string
+        name="delete_email_q_text"
+    >Ceci supprimera définitivement le compte.</string>
+    <string name="account_credentials">Identifiants du compte</string>
+    <string
+        name="account_credentials_text"
+    >Partagez-les de manière sécurisée avec l\'utilisateur.</string>
+    <string name="done">Terminé</string>
+    <string name="delete_song_q">Supprimer %1$s ?</string>
+    <string
+        name="delete_song_q_text"
+    >Ceci supprimera définitivement le fichier et ses données.</string>
+
+    <string name="my_stats">Mes stats</string>
+    <string name="everyone">Tout le monde</string>
+
+    <string name="invalid_credentials">Identifiants invalides</string>
+    <string
+        name="reset_password_failed"
+    >Échec de la réinitialisation du mot de passe</string>
+    <string name="session_expired">Session expirée</string>
+    <string name="unknown_error">Erreur inconnue</string>
+    <string
+        name="request_failed_with_status"
+    >La requête a échoué avec le statut %1$d</string>
+
+    <string
+        name="library_ingestion_complete"
+    >Importation de la bibliothèque terminée</string>
+    <string
+        name="library_ingestion_failed"
+    >Échec de l\'importation de la bibliothèque</string>
+    <string
+        name="library_resync_complete"
+    >Resynchronisation de la bibliothèque terminée</string>
+    <string
+        name="library_resync_failed"
+    >Échec de la resynchronisation de la bibliothèque</string>
+</resources>

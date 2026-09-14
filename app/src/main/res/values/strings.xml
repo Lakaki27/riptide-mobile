@@ -1,0 +1,197 @@
+<resources>
+    <string name="app_name">Riptide</string>
+
+    <string name="now_playing">Now Playing</string>
+    <string name="add_music">Add music</string>
+    <string name="close">Close</string>
+    <string name="starting">Starting…</string>
+    <string name="start_download">Start download</string>
+
+    <string name="status_downloading">Downloading</string>
+    <string name="status_processing">Processing</string>
+    <string name="status_uploading">Uploading</string>
+    <string name="status_done">Added to Library</string>
+    <string name="status_failed">Failed</string>
+
+    <string name="playing_next">Playing next</string>
+    <string name="search_queue">Search queue</string>
+    <string name="search_songs">Search songs…</string>
+    <string name="search_artists">Search artists…</string>
+    <string name="add_to_queue">Add to queue</string>
+    <string name="play_next">Play next</string>
+    <string name="add_to_playlist">Add to playlist ›</string>
+    <string name="no_playlists">No playlists</string>
+    <string name="remove_from_playlist">Remove from playlist</string>
+    <string name="play_all">Play all</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="signing_in">Signing in…</string>
+
+    <string name="add_song">Add song</string>
+    <string name="search_in_this_playlist">Search in this playlist</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+
+    <string name="statistics">Statistics</string>
+    <string name="loading">Loading…</string>
+    <string name="listening_activity">Listening activity</string>
+    <string name="heatmap_this_month">This month</string>
+    <string name="heatmap_this_year">This year</string>
+    <string name="heatmap_all_time">All time</string>
+    <string name="top_songs">Top songs</string>
+    <string name="no_plays_yet">No plays yet</string>
+    <string name="top_artists">Top artists</string>
+
+    <string name="legal_disclaimer_view">View legal disclaimer</string>
+    <string
+        name="legal_disclaimer_download_title"
+    >Disclaimer of Responsibility &amp; User Compliance</string>
+    <string
+        name="legal_disclaimer_download_text"
+    >By using this feature, particularly any integrated yt-dlp functionality, you are solely responsible for ensuring you have the right to download, convert, or distribute any content you access. The developer does not condone or facilitate copyright infringement, and this application is an independent project not affiliated with any third-party platform.</string>
+
+    <string name="order_mode_normal">Play through</string>
+    <string name="order_mode_loop_song">Loop this song</string>
+    <string name="order_mode_loop_playlist">Loop playlist</string>
+    <string name="order_mode_randomize">Shuffle</string>
+
+    <string name="couldnt_fetch_video">Could not fetch video info</string>
+    <string name="couldnt_start_download">Could not start download</string>
+    <string name="upload_failed">Upload failed</string>
+    <string name="from_url">From URL</string>
+    <string name="upload_files">Upload files</string>
+    <string name="fetch_info">Fetch info</string>
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
+    <string name="back">Back</string>
+    <string name="dragndrop_audio">Tap to select audio files</string>
+    <string name="uploading">Uploading…</string>
+    <plurals name="upload_files_count">
+        <item quantity="one">Upload %1$d file</item>
+        <item quantity="other">Upload %1$d files</item>
+    </plurals>
+    <string name="running_dl_job">Running download job</string>
+
+    <string name="filter_created_at">Created at</string>
+    <string name="filter_name">Name</string>
+    <string name="filter_duration">Duration</string>
+    <string name="filter_artist">Artist</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_artists">Artists</string>
+    <string name="nav_playlists">Playlists</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="song_menu_add_to_queue">Add to queue</string>
+    <string name="song_menu_play_next">Play next</string>
+    <string name="song_menu_add_to_playlist">Add to playlist</string>
+    <string name="song_menu_remove_from_playlist">Remove from playlist</string>
+    <string name="song_menu_no_playlists">No playlists</string>
+
+    <string name="set_a_new_password">Set a new password</string>
+    <string
+        name="your_password_was_reset"
+    >Your password was reset by an administrator. Choose a new one to continue.</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_confirm">Confirm new password</string>
+    <string name="saving">Saving…</string>
+    <string name="set_password">Set password</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password_q">Forgot password?</string>
+    <string
+        name="forgot_password_text"
+    >Please contact your administrator to have your password reset.</string>
+    <string name="got_it">Got it</string>
+
+    <string name="playlist_name">Playlist name</string>
+    <string name="theme_updated">Theme updated</string>
+    <string name="language_updated">Language updated</string>
+    <string
+        name="password_length_requirement"
+    >New password must be at least %1$d characters</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_changed">Password changed</string>
+    <string name="password_changed_fail">Failed to change password</string>
+    <string name="couldnt_reset_password">Could not reset password</string>
+    <string name="user_deleted">User deleted</string>
+    <string name="user_deleted_fail">Could not delete user</string>
+    <string name="song_deleted">Song deleted</string>
+
+    <string name="preferences">Preferences</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="language">Language</string>
+    <string name="language_en">English</string>
+    <string name="language_fr">French</string>
+
+    <string name="change_password">Change password</string>
+    <string
+        name="change_password_requirement"
+    >New password must be at least %1$d characters</string>
+    <string name="current_password">Current password</string>
+    <string name="update_password">Update password</string>
+
+    <string name="users">Users</string>
+    <string name="new_user">New user</string>
+    <string name="pending_reset">Pending reset</string>
+    <string name="reset_password_for">Reset password for %1$s</string>
+    <string name="reset_password">Reset password</string>
+    <string name="delete">Delete</string>
+
+    <string name="library_management">Library management</string>
+    <string name="ingesting">Ingesting…</string>
+    <string name="ingest_consume_folder">Ingest consume folder</string>
+    <string name="resyncing">Resyncing…</string>
+    <string name="resync_library">Resync library</string>
+    <string name="library_resync_progress">Library resync progress</string>
+    <string name="song_progress_count">%1$d / %2$d songs</string>
+    <string name="delete_songs">Delete songs</string>
+    <string name="logout">Logout</string>
+
+    <string name="user_role">User role</string>
+    <string name="role_user">User</string>
+    <string name="role_admin">Admin</string>
+
+    <string name="reset_password_for_q">Reset password for %1$s?</string>
+    <string
+        name="reset_password_for_q_text"
+    >A new temporary password will be generated.</string>
+    <string name="reset">Reset</string>
+    <string name="delete_email_q">Delete %1$s?</string>
+    <string
+        name="delete_email_q_text"
+    >This permanently deletes the account.</string>
+    <string name="account_credentials">Account credentials</string>
+    <string
+        name="account_credentials_text"
+    >Share these with the user securely.</string>
+    <string name="done">Done</string>
+    <string name="delete_song_q">Delete %1$s?</string>
+    <string
+        name="delete_song_q_text"
+    >This permanently removes the file and its data.</string>
+
+    <string name="my_stats">My stats</string>
+    <string name="everyone">Everyone</string>
+
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="reset_password_failed">Failed to reset password</string>
+    <string name="session_expired">Session expired</string>
+    <string name="unknown_error">Unknown error</string>
+    <string
+        name="request_failed_with_status"
+    >Request failed with status %1$d</string>
+
+    <string
+        name="library_ingestion_complete"
+    >Library ingestion complete</string>
+    <string name="library_ingestion_failed">Library ingestion failed</string>
+    <string name="library_resync_complete">Library resync complete</string>
+    <string name="library_resync_failed">Library resync failed</string>
+</resources>
