@@ -9,10 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.evertide.riptide.R
 import com.evertide.riptide.data.local.ThemePreference
 import com.evertide.riptide.navigation.Routes
 
@@ -30,7 +32,9 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        item { Text("Settings", style = MaterialTheme.typography.titleLarge) }
+        item {
+            Text(stringResource(R.string.nav_settings), style = MaterialTheme.typography.titleLarge)
+        }
 
         item { PreferencesSection(themePreference, state.language, viewModel) }
 
@@ -47,24 +51,26 @@ fun SettingsScreen(
                         viewModel.logout()
                         navController.navigate(Routes.AUTH) { popUpTo(0) { inclusive = true } }
                     }
-            ) { Text("Logout") }
+            ) { Text(stringResource(R.string.logout)) }
         }
     }
 
     state.credentialModal?.let { (email, password) ->
         AlertDialog(
                 onDismissRequest = viewModel::dismissCredentialModal,
-                title = { Text("Account credentials") },
+                title = { Text(stringResource(R.string.account_credentials)) },
                 text = {
                     Column {
-                        Text("Share these with the user securely.")
+                        Text(stringResource(R.string.account_credentials_text))
                         Spacer(Modifier.height(8.dp))
-                        Text("Email: $email")
-                        Text("Password: $password")
+                        Text(stringResource(R.string.email_info, email))
+                        Text(stringResource(R.string.password_info, password))
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = viewModel::dismissCredentialModal) { Text("Done") }
+                    TextButton(onClick = viewModel::dismissCredentialModal) {
+                        Text(stringResource(R.string.done))
+                    }
                 },
         )
     }
@@ -72,13 +78,17 @@ fun SettingsScreen(
     state.confirmResetUser?.let { user ->
         AlertDialog(
                 onDismissRequest = { viewModel.setConfirmResetUser(null) },
-                title = { Text("Reset password for ${user.email}?") },
-                text = { Text("A new temporary password will be generated.") },
+                title = { Text(stringResource(R.string.reset_password_for_q, user.email)) },
+                text = { Text(stringResource(R.string.reset_password_for_q_text)) },
                 confirmButton = {
-                    TextButton(onClick = viewModel::confirmResetUserPassword) { Text("Reset") }
+                    TextButton(onClick = viewModel::confirmResetUserPassword) {
+                        Text(stringResource(R.string.reset))
+                    }
                 },
                 dismissButton = {
-                    TextButton(onClick = { viewModel.setConfirmResetUser(null) }) { Text("Cancel") }
+                    TextButton(onClick = { viewModel.setConfirmResetUser(null) }) {
+                        Text(stringResource(R.string.cancel))
+                    }
                 },
         )
     }
@@ -86,14 +96,14 @@ fun SettingsScreen(
     state.confirmDeleteUser?.let { user ->
         AlertDialog(
                 onDismissRequest = { viewModel.setConfirmDeleteUser(null) },
-                title = { Text("Delete ${user.email}?") },
-                text = { Text("This permanently deletes the account.") },
+                title = { Text(stringResource(R.string.delete_email_q, user.email)) },
+                text = { Text(stringResource(R.string.delete_email_q_text)) },
                 confirmButton = {
                     TextButton(onClick = viewModel::confirmDeleteUserAction) { Text("Delete") }
                 },
                 dismissButton = {
                     TextButton(onClick = { viewModel.setConfirmDeleteUser(null) }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 },
         )
@@ -102,14 +112,16 @@ fun SettingsScreen(
     state.confirmDeleteSong?.let { music ->
         AlertDialog(
                 onDismissRequest = { viewModel.setConfirmDeleteSong(null) },
-                title = { Text("Delete ${music.title}?") },
-                text = { Text("This permanently removes the file and its data.") },
+                title = { Text(stringResource(R.string.delete_song_q, music.title)) },
+                text = { Text(stringResource(R.string.delete_song_q_text)) },
                 confirmButton = {
-                    TextButton(onClick = viewModel::confirmDeleteSongAction) { Text("Delete") }
+                    TextButton(onClick = viewModel::confirmDeleteSongAction) {
+                        Text(stringResource(R.string.delete))
+                    }
                 },
                 dismissButton = {
                     TextButton(onClick = { viewModel.setConfirmDeleteSong(null) }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 },
         )
@@ -118,34 +130,38 @@ fun SettingsScreen(
     if (state.showCreateUserModal) {
         AlertDialog(
                 onDismissRequest = { viewModel.setCreateUserModalVisible(false) },
-                title = { Text("New user") },
+                title = { Text(stringResource(R.string.new_user)) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedTextField(
                                 value = state.newUserEmail,
                                 onValueChange = viewModel::onNewUserEmailChange,
-                                placeholder = { Text("Email") },
+                                placeholder = { Text(stringResource(R.string.email)) },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth(),
                         )
                         var roleExpanded by remember { mutableStateOf(false) }
                         Box {
                             OutlinedButton(onClick = { roleExpanded = true }) {
-                                Text(if (state.newUserRole == "admin") "Admin" else "User")
+                                Text(
+                                        if (state.newUserRole == "admin")
+                                                stringResource(R.string.role_admin)
+                                        else stringResource(R.string.role_user)
+                                )
                             }
                             DropdownMenu(
                                     expanded = roleExpanded,
                                     onDismissRequest = { roleExpanded = false }
                             ) {
                                 DropdownMenuItem(
-                                        text = { Text("User") },
+                                        text = { Text(stringResource(R.string.role_user)) },
                                         onClick = {
                                             viewModel.onNewUserRoleChange("user")
                                             roleExpanded = false
                                         }
                                 )
                                 DropdownMenuItem(
-                                        text = { Text("Admin") },
+                                        text = { Text(stringResource(R.string.role_admin)) },
                                         onClick = {
                                             viewModel.onNewUserRoleChange("admin")
                                             roleExpanded = false
@@ -156,11 +172,13 @@ fun SettingsScreen(
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = viewModel::submitCreateUser) { Text("Create") }
+                    TextButton(onClick = viewModel::submitCreateUser) {
+                        Text(stringResource(R.string.create))
+                    }
                 },
                 dismissButton = {
                     TextButton(onClick = { viewModel.setCreateUserModalVisible(false) }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 },
         )
@@ -174,16 +192,19 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Delete songs", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                            stringResource(R.string.delete_songs),
+                            style = MaterialTheme.typography.titleMedium
+                    )
                     TextButton(onClick = { viewModel.setDeleteSongModalVisible(false) }) {
-                        Text("Close")
+                        Text(stringResource(R.string.close))
                     }
                 }
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
                         value = state.songQuery,
                         onValueChange = viewModel::onSongQueryChange,
-                        placeholder = { Text("Search songs...") },
+                        placeholder = { Text(stringResource(R.string.search_songs)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                 )
@@ -206,7 +227,7 @@ fun SettingsScreen(
                                 )
                             }
                             TextButton(onClick = { viewModel.setConfirmDeleteSong(music) }) {
-                                Text("Delete")
+                                Text(stringResource(R.string.delete))
                             }
                         }
                     }
@@ -223,7 +244,7 @@ private fun PreferencesSection(
         viewModel: SettingsViewModel
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Preferences", style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.preferences), style = MaterialTheme.typography.titleMedium)
         Row(
                 modifier =
                         Modifier.fillMaxWidth()
@@ -235,7 +256,7 @@ private fun PreferencesSection(
             var themeExpanded by remember { mutableStateOf(false) }
             Column {
                 Text(
-                        "Theme",
+                        stringResource(R.string.theme),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -243,7 +264,7 @@ private fun PreferencesSection(
                     OutlinedButton(onClick = { themeExpanded = true }) {
                         Text(
                                 when (themePreference) {
-                                    ThemePreference.SYSTEM -> "System"
+                                    ThemePreference.SYSTEM -> stringResource(R.string.theme_system)
                                     ThemePreference.LIGHT -> "Light"
                                     ThemePreference.DARK -> "Dark"
                                 }
@@ -254,21 +275,21 @@ private fun PreferencesSection(
                             onDismissRequest = { themeExpanded = false }
                     ) {
                         DropdownMenuItem(
-                                text = { Text("System") },
+                                text = { Text(stringResource(R.string.theme_system)) },
                                 onClick = {
                                     viewModel.setTheme(ThemePreference.SYSTEM)
                                     themeExpanded = false
                                 }
                         )
                         DropdownMenuItem(
-                                text = { Text("Light") },
+                                text = { Text(stringResource(R.string.theme_light)) },
                                 onClick = {
                                     viewModel.setTheme(ThemePreference.LIGHT)
                                     themeExpanded = false
                                 }
                         )
                         DropdownMenuItem(
-                                text = { Text("Dark") },
+                                text = { Text(stringResource(R.string.theme_dark)) },
                                 onClick = {
                                     viewModel.setTheme(ThemePreference.DARK)
                                     themeExpanded = false
@@ -281,27 +302,30 @@ private fun PreferencesSection(
             var langExpanded by remember { mutableStateOf(false) }
             Column {
                 Text(
-                        "Language",
+                        stringResource(R.string.language),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Box {
                     OutlinedButton(onClick = { langExpanded = true }) {
-                        Text(if (language == "fr") "French" else "English")
+                        Text(
+                                if (language == "fr") stringResource(R.string.language_fr)
+                                else stringResource(R.string.language_en)
+                        )
                     }
                     DropdownMenu(
                             expanded = langExpanded,
                             onDismissRequest = { langExpanded = false }
                     ) {
                         DropdownMenuItem(
-                                text = { Text("English") },
+                                text = { Text(stringResource(R.string.language_en)) },
                                 onClick = {
                                     viewModel.setLanguage("en")
                                     langExpanded = false
                                 }
                         )
                         DropdownMenuItem(
-                                text = { Text("French") },
+                                text = { Text(stringResource(R.string.language_fr)) },
                                 onClick = {
                                     viewModel.setLanguage("fr")
                                     langExpanded = false
@@ -317,7 +341,7 @@ private fun PreferencesSection(
 @Composable
 private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Change password", style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.change_password), style = MaterialTheme.typography.titleMedium)
         Column(
                 modifier =
                         Modifier.fillMaxWidth()
@@ -328,7 +352,10 @@ private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsVie
         ) {
             if (state.minPasswordLength > 0) {
                 Text(
-                        "New password must be at least ${state.minPasswordLength} characters.",
+                        stringResource(
+                                R.string.password_length_requirement,
+                                state.minPasswordLength
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -336,7 +363,7 @@ private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsVie
             OutlinedTextField(
                     value = state.currentPassword,
                     onValueChange = viewModel::onCurrentPasswordChange,
-                    placeholder = { Text("Current password") },
+                    placeholder = { Text(stringResource(R.string.current_password)) },
                     singleLine = true,
                     visualTransformation =
                             androidx.compose.ui.text.input.PasswordVisualTransformation(),
@@ -345,7 +372,7 @@ private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsVie
             OutlinedTextField(
                     value = state.newPassword,
                     onValueChange = viewModel::onNewPasswordChange,
-                    placeholder = { Text("New password") },
+                    placeholder = { Text(stringResource(R.string.new_password)) },
                     singleLine = true,
                     visualTransformation =
                             androidx.compose.ui.text.input.PasswordVisualTransformation(),
@@ -354,7 +381,7 @@ private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsVie
             OutlinedTextField(
                     value = state.confirmPassword,
                     onValueChange = viewModel::onConfirmPasswordChange,
-                    placeholder = { Text("Confirm new password") },
+                    placeholder = { Text(stringResource(R.string.new_password_confirm)) },
                     singleLine = true,
                     visualTransformation =
                             androidx.compose.ui.text.input.PasswordVisualTransformation(),
@@ -367,7 +394,9 @@ private fun ChangePasswordSection(state: SettingsUiState, viewModel: SettingsVie
                         style = MaterialTheme.typography.bodyMedium
                 )
             }
-            Button(onClick = viewModel::submitPasswordChange) { Text("Update password") }
+            Button(onClick = viewModel::submitPasswordChange) {
+                Text(stringResource(R.string.update_password))
+            }
         }
     }
 }
@@ -380,8 +409,10 @@ private fun UsersSection(state: SettingsUiState, viewModel: SettingsViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Users", style = MaterialTheme.typography.titleMedium)
-            Button(onClick = { viewModel.setCreateUserModalVisible(true) }) { Text("New user") }
+            Text(stringResource(R.string.users), style = MaterialTheme.typography.titleMedium)
+            Button(onClick = { viewModel.setCreateUserModalVisible(true) }) {
+                Text(stringResource(R.string.new_user))
+            }
         }
         Column(
                 modifier =
@@ -400,16 +431,22 @@ private fun UsersSection(state: SettingsUiState, viewModel: SettingsViewModel) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(user.email, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text(
-                                user.role + if (user.mustResetPassword) " · Pending reset" else "",
+                                user.role +
+                                        if (user.mustResetPassword)
+                                                " · " + stringResource(R.string.pending_reset)
+                                        else "",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                     TextButton(onClick = { viewModel.setConfirmResetUser(user) }) {
-                        Text("Reset password")
+                        Text(stringResource(R.string.reset_password))
                     }
                     TextButton(onClick = { viewModel.setConfirmDeleteUser(user) }) {
-                        Text("Delete", color = MaterialTheme.colorScheme.error)
+                        Text(
+                                stringResource(R.string.delete),
+                                color = MaterialTheme.colorScheme.error
+                        )
                     }
                 }
             }
@@ -423,7 +460,10 @@ private fun LibraryManagementSection(viewModel: SettingsViewModel) {
     val resyncProgress by viewModel.libraryJobsRepository.resyncProgress.collectAsState()
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Library management", style = MaterialTheme.typography.titleMedium)
+        Text(
+                stringResource(R.string.library_management),
+                style = MaterialTheme.typography.titleMedium
+        )
         Column(
                 modifier =
                         Modifier.fillMaxWidth()
@@ -435,13 +475,23 @@ private fun LibraryManagementSection(viewModel: SettingsViewModel) {
             OutlinedButton(
                     onClick = viewModel.libraryJobsRepository::startConsume,
                     enabled = !consumeProgress.running,
-            ) { Text(if (consumeProgress.running) "Ingesting..." else "Ingest consume folder") }
+            ) {
+                Text(
+                        if (consumeProgress.running) stringResource(R.string.ingesting)
+                        else stringResource(R.string.ingest_consume_folder)
+                )
+            }
 
             Column {
                 OutlinedButton(
                         onClick = viewModel.libraryJobsRepository::startResync,
                         enabled = !resyncProgress.running,
-                ) { Text(if (resyncProgress.running) "Resyncing..." else "Resync library") }
+                ) {
+                    Text(
+                            if (resyncProgress.running) stringResource(R.string.resyncing)
+                            else stringResource(R.string.resync_library)
+                    )
+                }
                 if (resyncProgress.running) {
                     Spacer(Modifier.height(4.dp))
                     val progress =
@@ -453,7 +503,7 @@ private fun LibraryManagementSection(viewModel: SettingsViewModel) {
                             modifier = Modifier.fillMaxWidth()
                     )
                     Text(
-                            "${resyncProgress.processed} / ${resyncProgress.total} songs",
+                            stringResource(R.string.song_progress_count, resyncProgress.processed, resyncProgress.total),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -461,7 +511,7 @@ private fun LibraryManagementSection(viewModel: SettingsViewModel) {
             }
 
             OutlinedButton(onClick = { viewModel.setDeleteSongModalVisible(true) }) {
-                Text("Delete songs")
+                Text(stringResource(R.string.delete_songs))
             }
         }
     }

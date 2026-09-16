@@ -9,9 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.evertide.riptide.R
 
 @Composable
 fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
@@ -23,7 +26,7 @@ fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Statistics", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.statistics), style = MaterialTheme.typography.titleLarge)
 
             SingleChoiceSegmented(
                     options = listOf("My stats" to StatsScope.ME, "Everyone" to StatsScope.GLOBAL),
@@ -51,7 +54,10 @@ fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Listening activity", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                                stringResource(R.string.listening_activity),
+                                style = MaterialTheme.typography.titleMedium
+                        )
 
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             RangeDropdown(state.selectedRange, viewModel::setRange)
@@ -80,7 +86,7 @@ fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
 
                     state.selectedDay?.let { day ->
                         Text(
-                                "${day.formattedLong()} — ${day.count} play${if (day.count == 1) "" else "s"}",
+                                "${day.formattedLong()} — ${pluralStringResource(R.plurals.play_count, day.count, day.count)}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -158,21 +164,21 @@ private fun RangeDropdown(selected: HeatmapRange, onSelect: (HeatmapRange) -> Un
         OutlinedButton(onClick = { expanded = true }) { Text(label) }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
-                    text = { Text("This month") },
+                    text = { Text(stringResource(R.string.heatmap_this_month)) },
                     onClick = {
                         onSelect(HeatmapRange.MONTH)
                         expanded = false
                     }
             )
             DropdownMenuItem(
-                    text = { Text("This year") },
+                    text = { Text(stringResource(R.string.heatmap_this_year)) },
                     onClick = {
                         onSelect(HeatmapRange.YEAR)
                         expanded = false
                     }
             )
             DropdownMenuItem(
-                    text = { Text("All time") },
+                    text = { Text(stringResource(R.string.heatmap_all_time)) },
                     onClick = {
                         onSelect(HeatmapRange.ALL)
                         expanded = false
@@ -214,7 +220,7 @@ private fun LeaderboardSection(title: String, rows: List<Pair<String, String>>) 
         ) {
             if (rows.isEmpty()) {
                 Text(
-                        "No plays yet",
+                        stringResource(R.string.no_plays_yet),
                         modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,

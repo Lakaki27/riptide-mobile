@@ -7,8 +7,10 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.evertide.riptide.R
 import com.evertide.riptide.data.model.Music
 
 @Composable
@@ -34,14 +36,14 @@ fun SongMenu(
 
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
-                    text = { Text("Add to queue") },
+                    text = { Text(stringResource(R.string.song_menu_add_to_queue)) },
                     onClick = {
                         viewModel.addToQueue(music)
                         expanded = false
                     },
             )
             DropdownMenuItem(
-                    text = { Text("Play next") },
+                    text = { Text(stringResource(R.string.song_menu_play_next)) },
                     onClick = {
                         viewModel.playNext(music)
                         expanded = false
@@ -50,14 +52,14 @@ fun SongMenu(
 
             if (isAdmin) {
                 DropdownMenuItem(
-                        text = { Text("Add to playlist ›") },
+                        text = { Text(stringResource(R.string.song_menu_add_to_playlist)) },
                         onClick = { showPlaylistSubmenu = true },
                 )
             }
 
             if (playlistId != null) {
                 DropdownMenuItem(
-                        text = { Text("Remove from playlist") },
+                        text = { Text(stringResource(R.string.song_menu_remove_from_playlist)) },
                         onClick = {
                             viewModel.removeFromPlaylist(playlistId, music.id)
                             onRemoved?.invoke()
@@ -72,7 +74,11 @@ fun SongMenu(
                 onDismissRequest = { showPlaylistSubmenu = false }
         ) {
             if (playlists.isEmpty()) {
-                DropdownMenuItem(text = { Text("No playlists") }, onClick = {}, enabled = false)
+                DropdownMenuItem(
+                        text = { Text(stringResource(R.string.song_menu_no_playlists)) },
+                        onClick = {},
+                        enabled = false
+                )
             } else {
                 playlists.forEach { playlist ->
                     DropdownMenuItem(

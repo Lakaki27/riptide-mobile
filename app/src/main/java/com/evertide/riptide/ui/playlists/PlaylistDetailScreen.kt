@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import com.evertide.riptide.R
 import com.evertide.riptide.navigation.Routes
 import com.evertide.riptide.ui.components.MusicList
 
@@ -46,15 +48,18 @@ fun PlaylistDetailScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                    )
                 }
                 Text(playlist.name, style = MaterialTheme.typography.titleLarge)
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(onClick = { viewModel.setAddModalVisible(true) }) {
-                    Text("Add song")
+                    Text(stringResource(R.string.add_song))
                 }
-                Button(onClick = viewModel::playAll) { Text("Play all") }
+                Button(onClick = viewModel::playAll) { Text(stringResource(R.string.play_all)) }
             }
         }
 
@@ -63,7 +68,7 @@ fun PlaylistDetailScreen(
         OutlinedTextField(
                 value = state.localQuery,
                 onValueChange = viewModel::onLocalQueryChange,
-                placeholder = { Text("Search in this playlist") },
+                placeholder = { Text(stringResource(R.string.search_in_this_playlist)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
         )
@@ -93,14 +98,17 @@ fun PlaylistDetailScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Add song", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                            stringResource(R.string.add_song),
+                            style = MaterialTheme.typography.titleMedium
+                    )
                     TextButton(onClick = { viewModel.setAddModalVisible(false) }) { Text("Close") }
                 }
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
                         value = state.addQuery,
                         onValueChange = viewModel::onAddQueryChange,
-                        placeholder = { Text("Search songs...") },
+                        placeholder = { Text(stringResource(R.string.search_songs)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                 )

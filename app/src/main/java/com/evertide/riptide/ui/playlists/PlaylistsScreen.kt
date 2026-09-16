@@ -12,10 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.evertide.riptide.R
 import com.evertide.riptide.navigation.Routes
 
 @Composable
@@ -34,9 +36,14 @@ fun PlaylistsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Playlists", style = MaterialTheme.typography.titleLarge)
+            Text(
+                    stringResource(R.string.nav_playlists),
+                    style = MaterialTheme.typography.titleLarge
+            )
             if (isAdmin) {
-                Button(onClick = { showCreateDialog = true }) { Text("New playlist") }
+                Button(onClick = { showCreateDialog = true }) {
+                    Text(stringResource(R.string.new_playlist))
+                }
             }
         }
 
@@ -96,12 +103,12 @@ fun PlaylistsScreen(
     if (showCreateDialog) {
         AlertDialog(
                 onDismissRequest = { showCreateDialog = false },
-                title = { Text("New playlist") },
+                title = { Text(stringResource(R.string.new_playlist)) },
                 text = {
                     OutlinedTextField(
                             value = newName,
                             onValueChange = { newName = it },
-                            placeholder = { Text("Playlist name") },
+                            placeholder = { Text(stringResource(R.string.playlist_name)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                     )
@@ -113,10 +120,12 @@ fun PlaylistsScreen(
                                 newName = ""
                                 showCreateDialog = false
                             }
-                    ) { Text("Create") }
+                    ) { Text(stringResource(R.string.create)) }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showCreateDialog = false }) { Text("Cancel") }
+                    TextButton(onClick = { showCreateDialog = false }) {
+                        Text(stringResource(R.string.cancel))
+                    }
                 },
         )
     }

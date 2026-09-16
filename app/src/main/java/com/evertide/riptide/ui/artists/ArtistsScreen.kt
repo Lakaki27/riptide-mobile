@@ -13,11 +13,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.evertide.riptide.R
 import com.evertide.riptide.navigation.Routes
 
 @Composable
@@ -28,13 +30,13 @@ fun ArtistsScreen(
     val state by viewModel.uiState.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Artists", style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.nav_artists), style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
                 value = state.query,
                 onValueChange = viewModel::onQueryChange,
-                placeholder = { Text("Search artists...") },
+                placeholder = { Text(stringResource(R.string.search_artists)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
         )

@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.evertide.riptide.R
 import com.evertide.riptide.data.repository.PlayMode
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -76,7 +78,10 @@ fun ExpandedPlayer(
                 IconButton(onClick = onCollapse) {
                     Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Collapse")
                 }
-                Text("Now Playing", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                        stringResource(R.string.now_playing),
+                        style = MaterialTheme.typography.bodyMedium
+                )
                 Spacer(Modifier.width(48.dp))
             }
 

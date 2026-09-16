@@ -10,9 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.evertide.riptide.R
 import com.evertide.riptide.data.repository.DownloadStatus
 
 @Composable
@@ -37,7 +39,7 @@ fun DownloadsOverlay(viewModel: DownloadsOverlayViewModel = hiltViewModel()) {
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                                "Running download job",
+                                stringResource(R.string.running_dl_job),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.bodyMedium
@@ -68,11 +70,12 @@ fun DownloadsOverlay(viewModel: DownloadsOverlayViewModel = hiltViewModel()) {
     }
 }
 
+@Composable
 private fun statusLabel(status: DownloadStatus): String =
         when (status) {
-            DownloadStatus.DOWNLOADING -> "Downloading"
-            DownloadStatus.PROCESSING -> "Processing"
-            DownloadStatus.UPLOADING -> "Uploading"
-            DownloadStatus.DONE -> "Added to Library"
-            DownloadStatus.FAILED -> "Failed"
+            DownloadStatus.DOWNLOADING -> stringResource(R.string.status_downloading)
+            DownloadStatus.PROCESSING -> stringResource(R.string.status_processing)
+            DownloadStatus.UPLOADING -> stringResource(R.string.status_uploading)
+            DownloadStatus.DONE -> stringResource(R.string.status_done)
+            DownloadStatus.FAILED -> stringResource(R.string.status_failed)
         }

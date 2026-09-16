@@ -1,5 +1,6 @@
 package com.evertide.riptide.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,15 +10,17 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.evertide.riptide.R
 import com.evertide.riptide.data.model.Music
 import com.evertide.riptide.data.repository.PlayerRepository
 
-enum class SortField(val label: String) {
-    CREATED_AT("Created at"),
-    NAME("Name"),
-    ARTIST("Artist"),
-    DURATION("Duration"),
+enum class SortField(@StringRes val labelRes: Int) {
+    CREATED_AT(R.string.filter_created_at),
+    NAME(R.string.filter_name),
+    ARTIST(R.string.filter_artist),
+    DURATION(R.string.filter_duration),
 }
 
 @Composable
@@ -63,14 +66,16 @@ fun MusicList(
             ) {
                 var menuExpanded by remember { mutableStateOf(false) }
                 Box {
-                    OutlinedButton(onClick = { menuExpanded = true }) { Text(sortField.label) }
+                    OutlinedButton(onClick = { menuExpanded = true }) {
+                        Text(stringResource(sortField.labelRes))
+                    }
                     DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false }
                     ) {
                         SortField.entries.forEach { field ->
                             DropdownMenuItem(
-                                    text = { Text(field.label) },
+                                    text = { Text(stringResource(field.labelRes)) },
                                     onClick = {
                                         sortField = field
                                         menuExpanded = false

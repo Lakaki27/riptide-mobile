@@ -9,9 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.evertide.riptide.R
 import com.evertide.riptide.ui.components.MusicList
 
 @Composable
@@ -42,7 +44,7 @@ fun ArtistDetailScreen(
                 }
                 Text(current.name, style = MaterialTheme.typography.titleLarge)
             }
-            Button(onClick = viewModel::playAll) { Text("Play all") }
+            Button(onClick = viewModel::playAll) { Text(stringResource(R.string.play_all)) }
         }
 
         Spacer(Modifier.height(12.dp))

@@ -25,7 +25,9 @@
     <string name="play_all">Tout lire</string>
 
     <string name="email">E-mail</string>
+    <string name="email_info">E-mail: %1$d</string>
     <string name="password">Mot de passe</string>
+    <string name="password_info">Mot de passe: %1$d</string>
     <string name="sign_in">Se connecter</string>
     <string name="signing_in">Connexion en cours…</string>
 
@@ -46,6 +48,10 @@
     <string name="top_songs">Titres les plus écoutés</string>
     <string name="no_plays_yet">Aucune écoute pour le moment</string>
     <string name="top_artists">Artistes les plus écoutés</string>
+    <plurals name="play_count">
+        <item quantity="one">%1$d écoute</item>
+        <item quantity="other">%1$d écoutes</item>
+    </plurals>
 
     <string
         name="legal_disclaimer_view"
@@ -98,7 +104,7 @@
 
     <string name="song_menu_add_to_queue">Ajouter à la file d\'attente</string>
     <string name="song_menu_play_next">Lire ensuite</string>
-    <string name="song_menu_add_to_playlist">Ajouter à la playlist</string>
+    <string name="song_menu_add_to_playlist">Ajouter à la playlist ›</string>
     <string
         name="song_menu_remove_from_playlist"
     >Retirer de la playlist</string>
@@ -232,4 +238,10 @@
     <string
         name="library_resync_failed"
     >Échec de la resynchronisation de la bibliothèque</string>
+    <string name="server_connect">Connexion à un serveur</string>
+    <string name="server_address">Adresse du serveur</string>
+    <string
+        name="server_address_text"
+    >Entrez l\'adresse de votre serveur Riptide (ex. riptide.example.com ou 192.168.1.50:3000)</string>
+    <string name="continue_string">Continue</string>
 </resources>

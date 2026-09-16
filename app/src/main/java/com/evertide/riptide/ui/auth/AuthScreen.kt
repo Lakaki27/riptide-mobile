@@ -11,11 +11,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.evertide.riptide.navigation.Routes
+import androidx.compose.ui.res.stringResource
+import com.evertide.riptide.R
 
 @Composable
 fun AuthScreen(
-    navController: NavHostController,
-    viewModel: AuthViewModel = hiltViewModel(),
+        navController: NavHostController,
+        viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -23,9 +25,7 @@ fun AuthScreen(
         viewModel.events.collect { event ->
             when (event) {
                 is AuthEvent.NavigateHome -> {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(0) { inclusive = true }
-                    }
+                    navController.navigate(Routes.HOME) { popUpTo(0) { inclusive = true } }
                 }
             }
         }
@@ -41,14 +41,14 @@ fun AuthScreen(
 
     if (state.showForgotModal) {
         AlertDialog(
-            onDismissRequest = { viewModel.setForgotModalVisible(false) },
-            title = { Text("Forgot password") },
-            text = { Text("Please contact your administrator to have your password reset.") },
-            confirmButton = {
-                TextButton(onClick = { viewModel.setForgotModalVisible(false) }) {
-                    Text("Got it")
-                }
-            },
+                onDismissRequest = { viewModel.setForgotModalVisible(false) },
+                title = { Text(stringResource(R.string.forgot_password)) },
+                text = { Text(stringResource(R.string.forgot_password_text)) },
+                confirmButton = {
+                    TextButton(onClick = { viewModel.setForgotModalVisible(false) }) {
+                        Text(stringResource(R.string.got_it))
+                    }
+                },
         )
     }
 }
@@ -56,98 +56,110 @@ fun AuthScreen(
 @Composable
 private fun LoginForm(state: AuthUiState, viewModel: AuthViewModel) {
     Column(
-        modifier = Modifier.width(320.dp).padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.width(320.dp).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         // Phase 11: swap for the real app logo drawable.
-        Text("Riptide", style = MaterialTheme.typography.titleLarge)
-        Text("Sign in", style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.sign_in), style = MaterialTheme.typography.titleMedium)
 
         OutlinedTextField(
-            value = state.email,
-            onValueChange = viewModel::onEmailChange,
-            placeholder = { Text("Email") },
-            singleLine = true,
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth(),
+                value = state.email,
+                onValueChange = viewModel::onEmailChange,
+                placeholder = { Text(stringResource(R.string.email)) },
+                singleLine = true,
+                keyboardOptions =
+                        androidx.compose.foundation.text.KeyboardOptions(
+                                keyboardType = KeyboardType.Email
+                        ),
+                modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
-            value = state.password,
-            onValueChange = viewModel::onPasswordChange,
-            placeholder = { Text("Password") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth(),
+                value = state.password,
+                onValueChange = viewModel::onPasswordChange,
+                placeholder = { Text(stringResource(R.string.password)) },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions =
+                        androidx.compose.foundation.text.KeyboardOptions(
+                                keyboardType = KeyboardType.Password
+                        ),
+                modifier = Modifier.fillMaxWidth(),
         )
 
         state.error?.let {
-            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                    it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+            )
         }
 
         Button(
-            onClick = viewModel::submitLogin,
-            enabled = !state.loading,
-            modifier = Modifier.fillMaxWidth(),
+                onClick = viewModel::submitLogin,
+                enabled = !state.loading,
+                modifier = Modifier.fillMaxWidth(),
         ) {
             if (state.loading) {
                 CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
             } else {
-                Text("Sign in")
+                Text(stringResource(R.string.sign_in))
             }
         }
 
-        TextButton(onClick = { viewModel.setForgotModalVisible(true) }) {
-            Text("Forgot password?")
-        }
+        TextButton(onClick = { viewModel.setForgotModalVisible(true) }) { Text("Forgot password?") }
     }
 }
 
 @Composable
 private fun ResetPasswordForm(state: AuthUiState, viewModel: AuthViewModel) {
     Column(
-        modifier = Modifier.width(320.dp).padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.width(320.dp).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("Set a new password", style = MaterialTheme.typography.titleLarge)
+        Text(stringResource(R.string.set_a_new_password), style = MaterialTheme.typography.titleLarge)
         Text(
-            "Your password was reset by an administrator. Choose a new one to continue.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                stringResource(R.string.your_password_was_reset),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         OutlinedTextField(
-            value = state.newPassword,
-            onValueChange = viewModel::onNewPasswordChange,
-            placeholder = { Text("New password") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
+                value = state.newPassword,
+                onValueChange = viewModel::onNewPasswordChange,
+                placeholder = { Text(stringResource(R.string.new_password)) },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
-            value = state.confirmPassword,
-            onValueChange = viewModel::onConfirmPasswordChange,
-            placeholder = { Text("Confirm new password") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
+                value = state.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
+                placeholder = { Text(stringResource(R.string.new_password_confirm)) },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
         )
 
         state.resetError?.let {
-            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                    it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+            )
         }
 
         Button(
-            onClick = viewModel::submitReset,
-            enabled = !state.resetLoading,
-            modifier = Modifier.fillMaxWidth(),
+                onClick = viewModel::submitReset,
+                enabled = !state.resetLoading,
+                modifier = Modifier.fillMaxWidth(),
         ) {
             if (state.resetLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
             } else {
-                Text("Set password")
+                Text(stringResource(R.string.set_password))
             }
         }
     }

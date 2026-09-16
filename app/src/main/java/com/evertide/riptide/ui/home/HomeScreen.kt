@@ -6,9 +6,11 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.evertide.riptide.R
 import com.evertide.riptide.navigation.Routes
 import com.evertide.riptide.ui.components.MusicList
 
@@ -28,14 +30,16 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         ) {
-            Text("Home", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.nav_home), style = MaterialTheme.typography.titleLarge)
 
             IconButton(onClick = { viewModel.loadMusics() }) {
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh songs")
             }
 
             if (isAdmin) {
-                Button(onClick = { showAddModal = true }) { Text("Add music") }
+                Button(onClick = { showAddModal = true }) {
+                    Text(stringResource(R.string.add_music))
+                }
             }
         }
 
@@ -44,7 +48,7 @@ fun HomeScreen(
         OutlinedTextField(
                 value = state.query,
                 onValueChange = viewModel::onQueryChange,
-                placeholder = { Text("Search songs...") },
+                placeholder = { Text(stringResource(R.string.search_songs)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
         )

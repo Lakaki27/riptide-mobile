@@ -20,10 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.evertide.riptide.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,9 +55,15 @@ fun AddMusicModal(
                     verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Add music", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                            stringResource(R.string.add_music),
+                            style = MaterialTheme.typography.titleMedium
+                    )
                     IconButton(onClick = { showLegalDialog = true }) {
-                        Icon(Icons.Filled.Info, contentDescription = "View legal disclaimer")
+                        Icon(
+                                Icons.Filled.Info,
+                                contentDescription = stringResource(R.string.legal_disclaimer_view)
+                        )
                     }
                 }
                 TextButton(
@@ -62,7 +71,7 @@ fun AddMusicModal(
                             viewModel.resetState()
                             onClose()
                         }
-                ) { Text("Close") }
+                ) { Text(stringResource(R.string.close)) }
             }
 
             Spacer(Modifier.height(8.dp))
@@ -82,17 +91,12 @@ fun AddMusicModal(
     if (showLegalDialog) {
         AlertDialog(
                 onDismissRequest = { showLegalDialog = false },
-                title = { Text("Disclaimer of Responsibility & User Compliance") },
-                text = {
-                    Text(
-                            "By using this feature, particularly any integrated yt-dlp functionality, you are solely " +
-                                    "responsible for ensuring you have the right to download, convert, or distribute any content " +
-                                    "you access. The developer does not condone or facilitate copyright infringement, and this " +
-                                    "application is an independent project not affiliated with any third-party platform.",
-                    )
-                },
+                title = { Text(stringResource(R.string.legal_disclaimer_download_title)) },
+                text = { Text(stringResource(R.string.legal_disclaimer_download_text)) },
                 confirmButton = {
-                    TextButton(onClick = { showLegalDialog = false }) { Text("Got it") }
+                    TextButton(onClick = { showLegalDialog = false }) {
+                        Text(stringResource(R.string.got_it))
+                    }
                 },
         )
     }
@@ -107,29 +111,32 @@ private fun SegmentedModeSwitch(mode: AddMusicMode, onSelect: (AddMusicMode) -> 
                             .background(MaterialTheme.colorScheme.surface)
                             .padding(2.dp),
     ) {
-        listOf(AddMusicMode.URL to "From URL", AddMusicMode.FILE to "Upload files").forEach {
-                (value, label) ->
-            val selected = mode == value
-            Box(
-                    modifier =
-                            Modifier.weight(1f)
-                                    .clip(RoundedCornerShape(6.dp))
-                                    .background(
-                                            if (selected) MaterialTheme.colorScheme.primary
-                                            else Color.Transparent
-                                    )
-                                    .clickable { onSelect(value) }
-                                    .padding(vertical = 8.dp),
-                    contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                        label,
-                        color =
-                                if (selected) MaterialTheme.colorScheme.onPrimary
-                                else MaterialTheme.colorScheme.onSurfaceVariant
+        listOf(
+                        AddMusicMode.URL to stringResource(R.string.from_url),
+                        AddMusicMode.FILE to stringResource(R.string.upload_files)
                 )
-            }
-        }
+                .forEach { (value, label) ->
+                    val selected = mode == value
+                    Box(
+                            modifier =
+                                    Modifier.weight(1f)
+                                            .clip(RoundedCornerShape(6.dp))
+                                            .background(
+                                                    if (selected) MaterialTheme.colorScheme.primary
+                                                    else Color.Transparent
+                                            )
+                                            .clickable { onSelect(value) }
+                                            .padding(vertical = 8.dp),
+                            contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                                label,
+                                color =
+                                        if (selected) MaterialTheme.colorScheme.onPrimary
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
     }
 }
 
@@ -151,7 +158,7 @@ private fun UrlModeContent(
                     )
                     state.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                     Button(onClick = viewModel::submitUrl, modifier = Modifier.fillMaxWidth()) {
-                        Text("Fetch info")
+                        Text(stringResource(R.string.fetch_info))
                     }
                 }
         AddMusicStep.LOADING ->
@@ -177,13 +184,13 @@ private fun UrlModeContent(
                     OutlinedTextField(
                             value = state.previewTitle,
                             onValueChange = viewModel::onPreviewTitleChange,
-                            label = { Text("Title") },
+                            label = { Text(stringResource(R.string.title)) },
                             modifier = Modifier.fillMaxWidth(),
                     )
                     OutlinedTextField(
                             value = state.previewArtist,
                             onValueChange = viewModel::onPreviewArtistChange,
-                            label = { Text("Artist") },
+                            label = { Text(stringResource(R.string.artist)) },
                             modifier = Modifier.fillMaxWidth(),
                     )
                     state.error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
@@ -191,12 +198,19 @@ private fun UrlModeContent(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
                     ) {
-                        TextButton(onClick = viewModel::backToInput) { Text("Back") }
+                        TextButton(onClick = viewModel::backToInput) {
+                            Text(stringResource(R.string.back))
+                        }
                         Spacer(Modifier.weight(1f))
                         Button(
                                 onClick = { viewModel.confirmUrlDownload(onClose) },
                                 enabled = !state.uploading
-                        ) { Text(if (state.uploading) "Starting..." else "Start download") }
+                        ) {
+                            Text(
+                                    if (state.uploading) stringResource(R.string.starting)
+                                    else stringResource(R.string.start_download)
+                            )
+                        }
                     }
                 }
     }
@@ -211,7 +225,7 @@ private fun FileModeContent(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(onClick = onPickFiles, modifier = Modifier.fillMaxWidth().height(100.dp)) {
-            Text("Tap to select audio files")
+            Text(stringResource(R.string.dragndrop_audio))
         }
 
         if (state.selectedFiles.isNotEmpty()) {
@@ -246,8 +260,13 @@ private fun FileModeContent(
                 modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                    if (state.uploading) "Uploading..."
-                    else "Upload ${state.selectedFiles.size} file(s)"
+                    if (state.uploading) stringResource(R.string.uploading)
+                    else
+                            pluralStringResource(
+                                    R.plurals.upload_files_count,
+                                    state.selectedFiles.size,
+                                    state.selectedFiles.size,
+                            )
             )
         }
     }
