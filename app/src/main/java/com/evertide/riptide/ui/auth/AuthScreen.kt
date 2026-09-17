@@ -1,18 +1,20 @@
 package com.evertide.riptide.ui.auth
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.evertide.riptide.navigation.Routes
-import androidx.compose.ui.res.stringResource
 import com.evertide.riptide.R
+import com.evertide.riptide.navigation.Routes
 
 @Composable
 fun AuthScreen(
@@ -31,11 +33,28 @@ fun AuthScreen(
         }
     }
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        if (state.resetToken != null) {
-            ResetPasswordForm(state, viewModel)
-        } else {
-            LoginForm(state, viewModel)
+    Box(Modifier.fillMaxSize()) {
+        IconButton(
+                onClick = {
+                    navController.navigate(Routes.SERVER_SETUP) {
+                        popUpTo(Routes.SERVER_SETUP) { inclusive = true }
+                    }
+                },
+                modifier = Modifier.statusBarsPadding().padding(8.dp).align(Alignment.TopStart)
+        ) {
+            Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back to Server Setup"
+            )
+        }
+
+        // Main content centered
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (state.resetToken != null) {
+                ResetPasswordForm(state, viewModel)
+            } else {
+                LoginForm(state, viewModel)
+            }
         }
     }
 
@@ -60,7 +79,6 @@ private fun LoginForm(state: AuthUiState, viewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Phase 11: swap for the real app logo drawable.
         Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
         Text(stringResource(R.string.sign_in), style = MaterialTheme.typography.titleMedium)
 
@@ -119,7 +137,10 @@ private fun ResetPasswordForm(state: AuthUiState, viewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(stringResource(R.string.set_a_new_password), style = MaterialTheme.typography.titleLarge)
+        Text(
+                stringResource(R.string.set_a_new_password),
+                style = MaterialTheme.typography.titleLarge
+        )
         Text(
                 stringResource(R.string.your_password_was_reset),
                 style = MaterialTheme.typography.bodyMedium,

@@ -4,6 +4,7 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.QueueMusic
@@ -71,7 +72,11 @@ fun ExpandedPlayer(
                 modifier = Modifier.fillMaxSize().offset { IntOffset(0, dragOffsetY.roundToInt()) },
         ) {
             Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    modifier =
+                            Modifier.fillMaxWidth()
+                                    .statusBarsPadding() // Adds padding corresponding to the system
+                                    // status bar height
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
             ) {

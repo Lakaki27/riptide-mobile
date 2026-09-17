@@ -24,6 +24,7 @@ import com.evertide.riptide.ui.artists.ArtistsScreen
 import com.evertide.riptide.ui.auth.AuthScreen
 import com.evertide.riptide.ui.common.ToastBus
 import com.evertide.riptide.ui.common.ToastHost
+import com.evertide.riptide.ui.downloads.DownloadsOverlay
 import com.evertide.riptide.ui.home.HomeScreen
 import com.evertide.riptide.ui.player.ExpandedPlayer
 import com.evertide.riptide.ui.player.MiniBar
@@ -34,7 +35,6 @@ import com.evertide.riptide.ui.playlists.PlaylistsScreen
 import com.evertide.riptide.ui.serversetup.ServerSetupScreen
 import com.evertide.riptide.ui.settings.SettingsScreen
 import com.evertide.riptide.ui.statistics.StatisticsScreen
-import com.evertide.riptide.ui.downloads.DownloadsOverlay
 
 @Composable
 fun RiptideNavHost(startDestination: String, toastBus: ToastBus) {
@@ -52,11 +52,11 @@ fun RiptideNavHost(startDestination: String, toastBus: ToastBus) {
     Box(Modifier.fillMaxSize()) {
         Scaffold(
                 bottomBar = {
-                    if (showBottomNav) {
-                        Column {
-                            if (playerState.currentTrack != null) {
-                                MiniBar(onExpand = { expanded = true })
-                            }
+                    Column {
+                        if (playerState.currentTrack != null) {
+                            MiniBar(onExpand = { expanded = true })
+                        }
+                        if (showBottomNav) {
                             BottomNavBar(navController)
                         }
                     }
