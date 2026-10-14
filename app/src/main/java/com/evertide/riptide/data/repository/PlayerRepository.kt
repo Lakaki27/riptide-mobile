@@ -8,15 +8,11 @@ import com.evertide.riptide.player.PlaybackService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 enum class PlayMode {
     NORMAL,
@@ -29,10 +25,11 @@ data class PlayerState(
         val queue: List<Music> = emptyList(),
         val originalQueue: List<Music> = emptyList(),
         val currentIndex: Int = -1,
-        val audioUrl: String? = null,
         val isPlaying: Boolean = false,
         val mode: PlayMode = PlayMode.NORMAL,
         val sourceId: String? = null,
+        val playToken: Long =
+                0, // bumped on every explicit "play this index" so the service restarts/seeks
 ) {
     val currentTrack: Music?
         get() = queue.getOrNull(currentIndex)
@@ -43,11 +40,8 @@ data class PlayerState(
 class PlayerRepository
 @Inject
 constructor(
-        private val musicRepository: MusicRepository,
         @ApplicationContext private val appContext: Context,
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
     private val _state = MutableStateFlow(PlayerState())
     val state: StateFlow<PlayerState> = _state
 
@@ -60,42 +54,50 @@ constructor(
     private fun <T> shuffle(items: List<T>): List<T> = items.shuffled()
 
     private fun ensureServiceStarted() {
-        val intent = Intent(appContext, PlaybackService::class.java)
-        ContextCompat.startForegroundService(appContext, intent)
+        runCatching {
+            ContextCompat.startForegroundService(
+                    appContext,
+                    Intent(appContext, PlaybackService::class.java)
+            )
+        }
     }
 
-    private fun playIndex(index: Int) {
-        val track = _state.value.queue.getOrNull(index) ?: return
-        ensureServiceStarted()
-        scope.launch {
-            val url =
-                    runCatching { musicRepository.getStreamUrl(track.id) }.getOrNull()
-                            ?: return@launch
-            _currentPositionMs.value = 0L
-            _state.update { it.copy(currentIndex = index, audioUrl = url, isPlaying = true) }
-        }
+    private fun PlayerState.jump(index: Int) =
+            copy(currentIndex = index, isPlaying = true, playToken = playToken + 1)
+
+    private fun playIndex(index: Int, startService: Boolean = true) {
+        if (_state.value.queue.getOrNull(index) == null) return
+        if (startService) ensureServiceStarted()
+        _currentPositionMs.value = 0L
+        _state.update { it.jump(index) }
     }
 
     private fun advance() {
         val s = _state.value
-        val nextIndex = s.currentIndex + 1
+        val next = s.currentIndex + 1
         when {
-            nextIndex < s.queue.size -> playIndex(nextIndex)
-            s.mode == PlayMode.LOOP_PLAYLIST -> playIndex(0)
-            s.mode == PlayMode.RANDOMIZE -> {
-                _state.update { it.copy(queue = shuffle(it.queue)) }
-                playIndex(0)
-            }
+            next < s.queue.size -> playIndex(next, startService = false)
+            s.mode == PlayMode.LOOP_PLAYLIST -> playIndex(0, startService = false)
+            s.mode == PlayMode.RANDOMIZE -> reshuffleAndRestart()
             else -> _state.update { it.copy(isPlaying = false) }
         }
     }
 
+    private fun reshuffleAndRestart() {
+        _currentPositionMs.value = 0L
+        _state.update { it.copy(queue = shuffle(it.queue)).jump(0) }
+    }
+
     fun setQueue(tracks: List<Music>, startIndex: Int = 0, sourceId: String? = null) {
-        val queue = if (_state.value.mode == PlayMode.RANDOMIZE) shuffle(tracks) else tracks
-        _state.update { it.copy(queue = queue, originalQueue = tracks, sourceId = sourceId) }
-        val startTrackId = tracks.getOrNull(startIndex)?.id
-        val actualStart = queue.indexOfFirst { it.id == startTrackId }
-        playIndex(if (actualStart >= 0) actualStart else 0)
+        if (tracks.isEmpty()) return
+        ensureServiceStarted()
+        _currentPositionMs.value = 0L
+        _state.update { s ->
+            val queue = if (s.mode == PlayMode.RANDOMIZE) shuffle(tracks) else tracks
+            val startId = tracks.getOrNull(startIndex)?.id
+            val idx = queue.indexOfFirst { it.id == startId }.coerceAtLeast(0)
+            s.copy(queue = queue, originalQueue = tracks, sourceId = sourceId).jump(idx)
+        }
     }
 
     fun playFromList(tracks: List<Music>, track: Music, sourceId: String) {
@@ -112,32 +114,30 @@ constructor(
     }
 
     fun playFromSearch(track: Music) {
-        val s = _state.value
-        val existingIndex = s.queue.indexOfFirst { it.id == track.id }
-        if (existingIndex >= 0) {
-            playIndex(existingIndex)
-            return
-        }
-        val currentTrack = s.currentTrack
-        if (currentTrack == null) {
-            _state.update {
-                it.copy(
-                        queue = listOf(track) + it.queue,
-                        originalQueue = listOf(track) + it.originalQueue,
-                        currentIndex = 0,
-                )
-            }
-            playIndex(0)
-            return
-        }
-        val queue = s.queue.toMutableList().apply { add(s.currentIndex + 1, track) }
-        val originalIndex = s.originalQueue.indexOfFirst { it.id == currentTrack.id }
-        val originalQueue =
-                s.originalQueue.toMutableList().apply {
-                    add(if (originalIndex >= 0) originalIndex + 1 else size, track)
+        ensureServiceStarted()
+        _currentPositionMs.value = 0L
+        _state.update { s ->
+            val existing = s.queue.indexOfFirst { it.id == track.id }
+            val current = s.currentTrack
+            when {
+                existing >= 0 -> s.jump(existing)
+                current == null ->
+                        s.copy(
+                                        queue = listOf(track) + s.queue,
+                                        originalQueue = listOf(track) + s.originalQueue,
+                                )
+                                .jump(0)
+                else -> {
+                    val queue = s.queue.toMutableList().apply { add(s.currentIndex + 1, track) }
+                    val oi = s.originalQueue.indexOfFirst { it.id == current.id }
+                    val original =
+                            s.originalQueue.toMutableList().apply {
+                                add(if (oi >= 0) oi + 1 else size, track)
+                            }
+                    s.copy(queue = queue, originalQueue = original).jump(s.currentIndex + 1)
                 }
-        _state.update { it.copy(queue = queue, originalQueue = originalQueue) }
-        playIndex(s.currentIndex + 1)
+            }
+        }
     }
 
     fun addToQueue(track: Music) {
@@ -162,15 +162,13 @@ constructor(
         }
     }
 
-    fun sortQueue(tracks: List<Music>) {
+    fun sortQueue(tracks: List<Music>, sourceId: String) {
         val s = _state.value
-        if (s.mode == PlayMode.RANDOMIZE) return
+        if (s.mode == PlayMode.RANDOMIZE || s.sourceId != sourceId) return
         val currentTrack = s.currentTrack ?: return
-        val currentIndex = tracks.indexOfFirst { it.id == currentTrack.id }
-        if (currentIndex < 0) return
-        _state.update {
-            it.copy(queue = tracks, originalQueue = tracks, currentIndex = currentIndex)
-        }
+        val idx = tracks.indexOfFirst { it.id == currentTrack.id }
+        if (idx < 0) return
+        _state.update { it.copy(queue = tracks, originalQueue = tracks, currentIndex = idx) }
     }
 
     fun jumpTo(index: Int) = playIndex(index)
@@ -248,5 +246,15 @@ constructor(
     fun seekTo(positionMs: Long) {
         _currentPositionMs.value = positionMs
         _seekRequests.tryEmit(positionMs)
+    }
+
+    fun onPlayerIndexChanged(index: Int) {
+        _currentPositionMs.value = 0L
+        _state.update { if (it.currentIndex == index) it else it.copy(currentIndex = index) }
+    }
+
+    fun onQueueEnded() {
+        if (_state.value.mode == PlayMode.RANDOMIZE) reshuffleAndRestart()
+        else _state.update { it.copy(isPlaying = false) }
     }
 }

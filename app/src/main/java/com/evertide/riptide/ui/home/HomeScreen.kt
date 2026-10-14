@@ -5,10 +5,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.evertide.riptide.R
 import com.evertide.riptide.navigation.Routes
@@ -19,12 +21,12 @@ fun HomeScreen(
         navController: NavHostController,
         viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.uiState.collectAsState()
-    val isAdmin by viewModel.isAdmin.collectAsState()
-    val playerState by viewModel.playerRepository.state.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val isAdmin by viewModel.isAdmin.collectAsStateWithLifecycle()
+    val activeTrackId by viewModel.activeTrackId.collectAsStateWithLifecycle()
     var showAddModal by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
         Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -55,23 +57,40 @@ fun HomeScreen(
 
         Spacer(Modifier.height(12.dp))
 
-        if (state.loading) {
-            Box(
-                    Modifier.fillMaxWidth().weight(1f),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
-            ) { CircularProgressIndicator() }
-        } else {
-            MusicList(
-                    musics = state.musics,
-                    queueMusics = state.allMusics,
-                    sourceId = "home",
-                    activeTrackId = playerState.currentTrack?.id,
-                    modifier = Modifier.weight(1f),
-                    playerRepository = viewModel.playerRepository,
-                    onArtistClick = { music ->
-                        navController.navigate(Routes.artistDetail(music.artist.id))
-                    },
-            )
+        Box(Modifier.fillMaxWidth().padding(vertical = 4.dp).height(4.dp)) {
+            if (state.refreshing || state.searching) LinearProgressIndicator(Modifier.fillMaxSize())
+        }
+        Spacer(Modifier.height(8.dp))
+
+        when {
+            state.loading ->
+                    Box(Modifier.fillMaxWidth().weight(1f), Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+            state.error && state.allMusics.isEmpty() ->
+                    Column(
+                            Modifier.fillMaxWidth().weight(1f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(stringResource(R.string.load_error))
+                        Spacer(Modifier.height(8.dp))
+                        Button(onClick = viewModel::loadMusics) {
+                            Text(stringResource(R.string.retry))
+                        }
+                    }
+            else ->
+                    MusicList(
+                            musics = state.musics,
+                            queueMusics = state.allMusics,
+                            sourceId = "home",
+                            activeTrackId = activeTrackId,
+                            modifier = Modifier.weight(1f),
+                            playerRepository = viewModel.playerRepository,
+                            onArtistClick = {
+                                navController.navigate(Routes.artistDetail(it.artist.id))
+                            },
+                    )
         }
     }
 

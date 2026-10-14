@@ -22,12 +22,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-data class LibraryJobProgress(
-        val running: Boolean = false,
-        val processed: Int = 0,
-        val total: Int = 0
-)
-
 data class SettingsUiState(
         val language: String = "en",
         val minPasswordLength: Int = 0,
@@ -283,6 +277,13 @@ constructor(
                             confirmDeleteSong = null,
                     )
         }
+    }
+
+    // --- Library / thumbnails ---
+
+    fun refetchThumbnails() {
+        libraryJobsRepository.refetchThumbnails()
+        toastBus.show("Thumbnails cleared, refetching…")
     }
 
     // --- Logout ---

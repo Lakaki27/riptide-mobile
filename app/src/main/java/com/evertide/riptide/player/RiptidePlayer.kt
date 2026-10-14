@@ -20,6 +20,9 @@ class RiptidePlayer(
         playerRepository.previous()
     }
 
+    override fun seekToNextMediaItem() = playerRepository.skipNext()
+    override fun seekToPreviousMediaItem() = playerRepository.previous()
+
     override fun getAvailableCommands(): Player.Commands {
         return super.getAvailableCommands()
                 .buildUpon()

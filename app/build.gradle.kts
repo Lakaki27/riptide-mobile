@@ -18,7 +18,12 @@ android {
         versionName = "1.0"
     }
 
-    buildTypes { release { isMinifyEnabled = false } }
+    buildTypes { 
+        release { 
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -27,7 +32,10 @@ android {
 
     buildFeatures { compose = true }
 
-    lint { baseline = file("lint-baseline.xml") }
+    lint { 
+        baseline = file("lint-baseline.xml")
+        disable += "UnsafeOptInUsageError"
+    }
 }
 
 dependencies {
@@ -66,6 +74,9 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.5.0")
     implementation("androidx.media3:media3-session:1.5.0")
     implementation("androidx.media3:media3-common:1.5.0")
+    implementation("androidx.media3:media3-datasource:1.5.0")
+    implementation("androidx.media3:media3-database:1.5.0")
+    implementation("androidx.media3:media3-datasource-okhttp:1.5.0")
 
     // Image loading
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
@@ -73,4 +84,9 @@ dependencies {
 
     implementation("androidx.palette:palette-ktx:1.0.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 }

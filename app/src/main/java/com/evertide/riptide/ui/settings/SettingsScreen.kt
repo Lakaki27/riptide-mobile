@@ -503,11 +503,19 @@ private fun LibraryManagementSection(viewModel: SettingsViewModel) {
                             modifier = Modifier.fillMaxWidth()
                     )
                     Text(
-                            stringResource(R.string.song_progress_count, resyncProgress.processed, resyncProgress.total),
+                            stringResource(
+                                    R.string.song_progress_count,
+                                    resyncProgress.processed,
+                                    resyncProgress.total
+                            ),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
+            }
+
+            OutlinedButton(onClick = viewModel::refetchThumbnails) {
+                Text(stringResource(R.string.refetch_thumbnails))
             }
 
             OutlinedButton(onClick = { viewModel.setDeleteSongModalVisible(true) }) {

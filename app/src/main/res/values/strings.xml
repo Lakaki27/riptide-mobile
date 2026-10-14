@@ -206,4 +206,8 @@
         name="server_address_text"
     >Enter the address of your Riptide server (e.g. riptide.example.com or 192.168.1.50:3000)</string>
     <string name="continue_string">Continue</string>
+
+    <string name="load_error">Could not load songs</string>
+    <string name="retry">Retry</string>
+    <string name="refetch_thumbnails">Refetch thumbnails</string>
 </resources>

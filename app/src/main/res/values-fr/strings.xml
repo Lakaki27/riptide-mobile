@@ -243,5 +243,9 @@
     <string
         name="server_address_text"
     >Entrez l\'adresse de votre serveur Riptide (ex. riptide.example.com ou 192.168.1.50:3000)</string>
-    <string name="continue_string">Continue</string>
+    <string name="continue_string">Continuer</string>
+
+    <string name="load_error">Impossible de charger les chansons</string>
+    <string name="retry">Réessayer</string>
+    <string name="refetch_thumbnails">Recharger les miniatures</string>
 </resources>

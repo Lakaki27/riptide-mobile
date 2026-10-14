@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,23 +40,16 @@ fun MusicList(
         onPlayOverride: ((Music) -> Unit)? = null,
         playerRepository: PlayerRepository? = null,
 ) {
-    var sortField by remember { mutableStateOf(SortField.CREATED_AT) }
-    var ascending by remember { mutableStateOf(false) }
+    var sortField by rememberSaveable { mutableStateOf(SortField.CREATED_AT) }
+    var ascending by rememberSaveable { mutableStateOf(false) }
 
-    val sorted =
-            remember(musics, sortField, ascending) {
-                val comparator =
-                        when (sortField) {
-                            SortField.CREATED_AT -> compareBy<Music> { it.createdAt }
-                            SortField.NAME -> compareBy { it.title.lowercase() }
-                            SortField.ARTIST -> compareBy { it.artist.name.lowercase() }
-                            SortField.DURATION -> compareBy { it.durationSeconds }
-                        }
-                val result = musics.sortedWith(comparator)
-                if (ascending) result else result.reversed()
+    val sorted = remember(musics, sortField, ascending) { musics.sortedBy(sortField, ascending) }
+    val sortedQueue =
+            remember(queueMusics, musics, sorted, sortField, ascending) {
+                if (queueMusics === musics) sorted else queueMusics.sortedBy(sortField, ascending)
             }
 
-    LaunchedEffect(sorted) { playerRepository?.sortQueue(sorted) }
+    LaunchedEffect(sortedQueue, sourceId) { playerRepository?.sortQueue(sortedQueue, sourceId) }
 
     Column(modifier = modifier) {
         if (showFilters) {
@@ -94,15 +88,12 @@ fun MusicList(
         }
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            items(sorted, key = { it.id }) { music ->
+            items(sorted, key = { it.id }, contentType = { "music" }) { music ->
                 MusicRow(
                         music = music,
                         onPlay = {
-                            if (onPlayOverride != null) {
-                                onPlayOverride(music)
-                            } else {
-                                playerRepository?.playFromList(queueMusics, music, sourceId)
-                            }
+                            if (onPlayOverride != null) onPlayOverride(music)
+                            else playerRepository?.playFromList(sortedQueue, music, sourceId)
                         },
                         active = music.id == activeTrackId,
                         compact = compact,
@@ -114,4 +105,15 @@ fun MusicList(
             }
         }
     }
+}
+
+private fun List<Music>.sortedBy(field: SortField, ascending: Boolean): List<Music> {
+    val cmp =
+            when (field) {
+                SortField.CREATED_AT -> compareBy<Music> { it.createdAt }
+                SortField.NAME -> compareBy { it.title.lowercase() }
+                SortField.ARTIST -> compareBy { it.artist.name.lowercase() }
+                SortField.DURATION -> compareBy { it.durationSeconds }
+            }
+    return sortedWith(cmp).let { if (ascending) it else it.reversed() }
 }
