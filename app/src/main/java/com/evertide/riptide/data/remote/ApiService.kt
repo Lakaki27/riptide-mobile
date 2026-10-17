@@ -69,6 +69,8 @@ interface ApiService {
 
     @GET("api/playlists/{id}") suspend fun getPlaylist(@Path("id") id: String): Playlist
 
+    @DELETE("api/playlists/{id}") suspend fun deletePlaylist(@Path("id") id: String)
+
     @POST("api/playlists/{id}")
     suspend fun addSongToPlaylist(@Path("id") id: String, @Body body: AddSongRequest)
 

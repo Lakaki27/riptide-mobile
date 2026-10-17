@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.evertide.riptide.R
 import com.evertide.riptide.data.repository.PlayMode
+import com.evertide.riptide.ui.components.AddToPlaylistButton
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -74,8 +75,7 @@ fun ExpandedPlayer(
             Row(
                     modifier =
                             Modifier.fillMaxWidth()
-                                    .statusBarsPadding() // Adds padding corresponding to the system
-                                    // status bar height
+                                    .statusBarsPadding()
                                     .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -87,7 +87,7 @@ fun ExpandedPlayer(
                         stringResource(R.string.now_playing),
                         style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(Modifier.width(48.dp))
+                AddToPlaylistButton(music = track)
             }
 
             Column(

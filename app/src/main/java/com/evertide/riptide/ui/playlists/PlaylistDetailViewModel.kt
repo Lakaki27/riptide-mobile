@@ -3,15 +3,20 @@ package com.evertide.riptide.ui.playlists
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.evertide.riptide.data.local.PreferencesManager
 import com.evertide.riptide.data.model.Music
 import com.evertide.riptide.data.model.Playlist
 import com.evertide.riptide.data.repository.MusicRepository
 import com.evertide.riptide.data.repository.PlayerRepository
 import com.evertide.riptide.data.repository.PlaylistRepository
+import com.evertide.riptide.ui.common.ToastBus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class PlaylistDetailUiState(
@@ -20,6 +25,7 @@ data class PlaylistDetailUiState(
         val showAddModal: Boolean = false,
         val addQuery: String = "",
         val addResults: List<Music> = emptyList(),
+        val showDeleteConfirm: Boolean = false,
 )
 
 @HiltViewModel
@@ -29,10 +35,17 @@ constructor(
         private val playlistRepository: PlaylistRepository,
         private val musicRepository: MusicRepository,
         val playerRepository: PlayerRepository,
+        private val prefs: PreferencesManager,
+        private val toastBus: ToastBus,
         savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val playlistId: String = checkNotNull(savedStateHandle["playlistId"])
+
+    val isAdmin: StateFlow<Boolean> =
+            prefs.authState
+                    .map { it.role == "admin" }
+                    .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private val _uiState = MutableStateFlow(PlaylistDetailUiState())
     val uiState: StateFlow<PlaylistDetailUiState> = _uiState
@@ -99,6 +112,23 @@ constructor(
         viewModelScope.launch {
             runCatching { playlistRepository.removeSong(playlistId, musicId) }
             loadPlaylist()
+        }
+    }
+
+    fun setDeleteConfirmVisible(visible: Boolean) {
+        _uiState.value = _uiState.value.copy(showDeleteConfirm = visible)
+    }
+
+    fun deletePlaylist(onDeleted: () -> Unit) {
+        viewModelScope.launch {
+            val success = runCatching { playlistRepository.deletePlaylist(playlistId) }.isSuccess
+            _uiState.value = _uiState.value.copy(showDeleteConfirm = false)
+            if (success) {
+                toastBus.show("Playlist deleted")
+                onDeleted()
+            } else {
+                toastBus.show("Could not delete playlist")
+            }
         }
     }
 }

@@ -24,4 +24,6 @@ constructor(
 
     suspend fun removeSong(playlistId: String, musicId: String) =
             api.removeSongFromPlaylist(playlistId, musicId)
+
+    suspend fun deletePlaylist(id: String) = api.deletePlaylist(id)
 }

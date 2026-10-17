@@ -210,4 +210,8 @@
     <string name="load_error">Could not load songs</string>
     <string name="retry">Retry</string>
     <string name="refetch_thumbnails">Refetch thumbnails</string>
+
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="delete_playlist_q">Delete \"%1$s\"?</string>
+    <string name="delete_playlist_q_text">This will permanently delete the playlist. The songs themselves will not be deleted.</string>
 </resources>

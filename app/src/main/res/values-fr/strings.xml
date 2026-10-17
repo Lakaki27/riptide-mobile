@@ -248,4 +248,10 @@
     <string name="load_error">Impossible de charger les chansons</string>
     <string name="retry">Réessayer</string>
     <string name="refetch_thumbnails">Recharger les miniatures</string>
+
+    <string name="delete_playlist">Supprimer la playlist</string>
+    <string name="delete_playlist_q">Supprimer « %1$s » ?</string>
+    <string
+        name="delete_playlist_q_text"
+    >La playlist sera définitivement supprimée. Les morceaux ne seront pas supprimés.</string>
 </resources>
