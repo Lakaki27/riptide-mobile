@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
             RequestNotificationPermission()
 
-            RiptideTheme(darkTheme = darkTheme) {
+            RiptideTheme(themePreference = themePref) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     RootContent(onReady = { keepSplashOn = false })
                 }

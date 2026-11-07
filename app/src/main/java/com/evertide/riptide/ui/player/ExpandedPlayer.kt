@@ -1,5 +1,7 @@
 package com.evertide.riptide.ui.player
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -14,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -46,6 +49,14 @@ fun ExpandedPlayer(
                     }
 
     LaunchedEffect(track.id) { ambientViewModel.loadAmbientColor(track.thumbnailUrl) }
+
+    val ambientColor by ambientViewModel.ambientColor.collectAsState()
+    val glowColor by
+            animateColorAsState(
+                    targetValue = ambientColor ?: MaterialTheme.colorScheme.primary,
+                    animationSpec = tween(600),
+                    label = "glow",
+            )
 
     var dragOffsetY by remember { mutableStateOf(0f) }
     var dragOffsetX by remember { mutableStateOf(0f) }
@@ -99,6 +110,7 @@ fun ExpandedPlayer(
                         modifier =
                                 Modifier.fillMaxWidth()
                                         .aspectRatio(1f)
+                                        .offset(y = (-24).dp)
                                         .pointerInput(track.id) {
                                             detectHorizontalDragGestures(
                                                     onDragEnd = {
@@ -117,7 +129,13 @@ fun ExpandedPlayer(
                                                 change.consume()
                                             }
                                         }
-                                        .offset { IntOffset(dragOffsetX.roundToInt(), 0) },
+                                        .offset { IntOffset(dragOffsetX.roundToInt(), 0) }
+                                        .shadow(
+                                                elevation = 24.dp,
+                                                shape = RoundedCornerShape(16.dp),
+                                                ambientColor = glowColor,
+                                                spotColor = glowColor,
+                                        ),
                 ) {
                     AsyncImage(
                             model = track.thumbnailUrl,
